@@ -1,0 +1,22 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?currentSchema=${POSTGRES_SCHEMA}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:liquibase/db.changelog.yaml
+    enabled: true
+    default-schema: ${POSTGRES_SCHEMA}
+  graphql:
+    graphiql:
+      enabled: true
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    token: 1
+springdoc:
+  override-with-generic-response: false
+
