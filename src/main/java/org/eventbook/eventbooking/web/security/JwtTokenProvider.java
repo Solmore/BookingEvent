@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.math.BigInteger;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -32,7 +31,7 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
     }
 
-    public String createToken(final BigInteger userId,
+    public String createToken(final Long userId,
                               final String email) {
         Claims claims = Jwts.claims()
                 .subject(email)
@@ -62,7 +61,10 @@ public class JwtTokenProvider {
         String email = getEmail(token);
         UserDetails userDetails
                 = userDetailsService.loadUserByUsername(email);
-        return new UsernamePasswordAuthenticationToken(userDetails, "");
+        return new UsernamePasswordAuthenticationToken(
+                userDetails.getUsername(),
+                "",
+                userDetails.getAuthorities());
     }
 
     private String getEmail(final String token) {

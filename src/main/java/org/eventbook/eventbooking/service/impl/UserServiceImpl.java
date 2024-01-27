@@ -1,7 +1,7 @@
 package org.eventbook.eventbooking.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.eventbook.eventbooking.domain.event.Event;
+
 import org.eventbook.eventbooking.domain.exception.ResourceNotFoundException;
 import org.eventbook.eventbooking.domain.user.User;
 import org.eventbook.eventbooking.repository.UserRepository;
@@ -9,9 +9,6 @@ import org.eventbook.eventbooking.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigInteger;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -36,19 +33,13 @@ public class UserServiceImpl implements UserService {
             throw new IllegalStateException("Email already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Event> getAllByUserId(final BigInteger id) {
-        return userRepository.findAllByUserId(id);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public boolean isEventOwner(final BigInteger userId,
-                                final BigInteger eventId) {
+    public boolean isEventOwner(final Long userId,
+                                final Long eventId) {
         return userRepository.isEventOwner(userId, eventId);
     }
 

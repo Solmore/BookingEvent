@@ -2,5 +2,6 @@ package org.eventbook.eventbooking.domain.event;
 
 public enum Category {
 
-    CONCERT, GAME, CONFERENCE
+    Concert, Game, Conference
+
 }

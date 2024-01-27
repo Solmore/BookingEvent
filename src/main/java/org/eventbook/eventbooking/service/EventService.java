@@ -1,30 +1,21 @@
 package org.eventbook.eventbooking.service;
 
-import org.eventbook.eventbooking.domain.event.Category;
 import org.eventbook.eventbooking.domain.event.Event;
 
-import java.math.BigInteger;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface EventService {
 
-    Event getById(BigInteger id);
+    Event getById(Long id);
 
-    BigInteger getCountById(BigInteger id);
+    List<Event> getAllByUserId(Long id);
 
     void create(Event event);
 
-    List<Event> getAllEventByNameAndDuration(String name,
-                                             Date startDate,
-                                             Date endDate);
-
-
     List<Event> getAllEventByNameAndDurationAndCategory(String name,
-                                                        Date startDate,
-                                                        Date endDate,
-                                                        Category category);
+                                                        LocalDate startDate,
+                                                        LocalDate endDate,
+                                                        String category);
 
-    Event uploadCountByEventId(BigInteger eventId,
-                              BigInteger availableCount);
 }

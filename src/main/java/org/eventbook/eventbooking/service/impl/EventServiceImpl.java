@@ -1,7 +1,6 @@
 package org.eventbook.eventbooking.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.eventbook.eventbooking.domain.event.Category;
 import org.eventbook.eventbooking.domain.event.Event;
 import org.eventbook.eventbooking.domain.exception.ResourceNotFoundException;
 import org.eventbook.eventbooking.repository.EventRepository;
@@ -9,11 +8,10 @@ import org.eventbook.eventbooking.service.EventService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,10 +19,9 @@ public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
 
-
     @Override
     @Transactional(readOnly = true)
-    public Event getById(final BigInteger id) {
+    public Event getById(final Long id) {
         return eventRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Event not found")
@@ -33,93 +30,101 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional(readOnly = true)
-    public BigInteger getCountById(final BigInteger id) {
-        return eventRepository.findCountById(id);
+    public List<Event> getAllByUserId(final Long id) {
+        return Optional.ofNullable(eventRepository.findAllByUserId(id))
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Event not found"));
+        //return eventRepository.findAllByUserId(id);
     }
 
     @Override
     @Transactional
     public void create(final Event event) {
-        eventRepository.save(event);
+        eventRepository.saveAndFlush(event);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<Event> getAllEventByNameAndDuration(
-            final String name,
-            final Date startDate,
-            final Date endDate) {
-        if (name.isEmpty()) {
-            if (startDate == null) {
-                if (endDate == null) {
-                    return eventRepository.findAll();
-                }
-                Date now = Date.from(LocalDate.now()
-                        .atStartOfDay(ZoneId.systemDefault()).toInstant());
-                return eventRepository.findAllEventByDuration(
-                        now,
-                        endDate);
-            }
-            if (endDate == null) {
-                return eventRepository.findAllEventByStatedDate(
-                        startDate);
-            }
-            return eventRepository.findAllEventByDuration(
-                    startDate,
-                    endDate);
-        }
-        return eventRepository
-                .findAllEventByNameAndDuration(
-                        name,
-                        startDate,
-                        endDate);
-    }
 
     @Override
     @Transactional(readOnly = true)
     public List<Event> getAllEventByNameAndDurationAndCategory(
             final String name,
-            final Date startDate,
-            final Date endDate,
-            final Category category) {
+            final LocalDate startDate,
+            final LocalDate endDate,
+            final String category) {
         if (name.isEmpty()) {
             if (startDate == null) {
                 if (endDate == null) {
-                    return eventRepository.findAllEventByCategory(category);
+                    return Optional.ofNullable(eventRepository
+                            .findAllEventByCategory(category)).orElseThrow(
+                            () -> new ResourceNotFoundException(
+                                    "Event not found"));
                 }
-                Date now = Date.from(LocalDate.now()
+                LocalDate now = LocalDate.from(LocalDate.now()
                         .atStartOfDay(ZoneId.systemDefault()).toInstant());
-                return eventRepository.findAllEventByDurationAndCategory(
+                return Optional.ofNullable(eventRepository
+                        .findAllEventByDurationAndCategory(
                         now,
                         endDate,
-                        category);
+                        category)).orElseThrow(
+                        () -> new ResourceNotFoundException("Event not found"));
             }
             if (endDate == null) {
-                return
-                        eventRepository
-                        .findAllEventByStatedDateAndCategory(
+                return Optional.ofNullable(eventRepository
+                        .findAllEventByStartedDateAndCategory(
                                 startDate,
-                                category);
+                                category))
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Event not found"));
             }
-            return eventRepository
+            return Optional.ofNullable(eventRepository
                     .findAllEventByDurationAndCategory(
                             startDate,
                             endDate,
-                            category);
+                            category))
+                    .orElseThrow(() ->
+                            new ResourceNotFoundException(
+                                    "Event not found"));
         }
-        return eventRepository
-                .findAllEventByNameAndDurationAndCategory(name,
+        String nameSearch = '%' + name;
+        nameSearch += '%';
+        if (startDate == null) {
+            if (endDate == null) {
+                return Optional.ofNullable(eventRepository.
+                                findAllEventByNameAndCategory(nameSearch,
+                                                              category))
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Event not found"));
+            }
+            LocalDate now = LocalDate.from(LocalDate.now()
+                    .atStartOfDay(ZoneId.systemDefault()).toInstant());
+            return Optional.ofNullable(eventRepository
+                            .findAllEventByNameAndDuration(nameSearch,
+                                                           now,
+                                                           endDate))
+                    .orElseThrow(() ->
+                            new ResourceNotFoundException(
+                                    "Event not found"));
+        }
+        if (endDate == null) {
+            return Optional.ofNullable(eventRepository
+                            .findAllEventByNameAndStartedDateAndCategory(
+                    nameSearch,
+                    startDate,
+                    category))
+                    .orElseThrow(() ->
+                            new ResourceNotFoundException(
+                                    "Event not found"));
+        }
+        return Optional.ofNullable(eventRepository
+                .findAllEventByNameAndDurationAndCategory(nameSearch,
                                                           startDate,
                                                           endDate,
-                                                          category);
+                                                          category))
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Event not found"));
     }
 
-    @Override
-    @Transactional
-    public Event uploadCountByEventId(final BigInteger eventId,
-                                     final BigInteger availableCount) {
-           eventRepository.uploadCountByEventId(eventId, availableCount);
-           return getById(eventId);
-
-    }
 }

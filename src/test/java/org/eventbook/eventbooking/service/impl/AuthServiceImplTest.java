@@ -20,8 +20,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.math.BigInteger;
-
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 @Import(TestConfig.class)
@@ -49,7 +47,7 @@ public class AuthServiceImplTest {
 
     @Test
     void auth() {
-        BigInteger userId = new BigInteger("1");
+        Long userId = 1L;
         String email = "username@gmail.com";
         String password = "password";
         String Token = "Token";

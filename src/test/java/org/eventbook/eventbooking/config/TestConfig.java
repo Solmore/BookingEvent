@@ -4,6 +4,7 @@ import freemarker.template.Configuration;
 import lombok.RequiredArgsConstructor;
 import org.eventbook.eventbooking.repository.EventRepository;
 import org.eventbook.eventbooking.repository.UserRepository;
+import org.eventbook.eventbooking.service.impl.TicketServiceImpl;
 import org.eventbook.eventbooking.service.impl.AuthServiceImpl;
 import org.eventbook.eventbooking.service.impl.EventServiceImpl;
 import org.eventbook.eventbooking.service.impl.UserServiceImpl;
@@ -87,6 +88,15 @@ public class TestConfig {
             final EventRepository eventRepository
     ) {
         return new EventServiceImpl(eventRepository);
+    }
+
+    @Bean
+    @Primary
+    public TicketServiceImpl ticketService(
+            final EventRepository eventRepository
+    ) {
+        return new TicketServiceImpl(eventRepository,
+                                     userRepository());
     }
 
 

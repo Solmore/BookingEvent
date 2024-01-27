@@ -1,36 +1,30 @@
 package org.eventbook.eventbooking.web.security.expression;
 
 import lombok.RequiredArgsConstructor;
-import org.eventbook.eventbooking.service.UserService;
-import org.eventbook.eventbooking.web.security.JwtEntity;
+import org.eventbook.eventbooking.domain.exception.ResourceNotFoundException;
+import org.eventbook.eventbooking.domain.user.User;
+import org.eventbook.eventbooking.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.math.BigInteger;
 
 @Service("customSecurityExpression")
 @RequiredArgsConstructor
 public class CustomSecurityExpression {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
-    public boolean canAccessUser(final BigInteger id) {
+    public boolean canAccessUser(final Long id) {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
-        JwtEntity user = (JwtEntity) authentication.getPrincipal();
-        BigInteger userId = user.getId();
+        String email = (String) authentication.getPrincipal();
+        User user = userRepository.findByEmail(email).orElseThrow(() ->
+                new ResourceNotFoundException("User not found")
+        );
 
-        return userId.equals(id);
+
+        return user.getId().equals(id);
     }
 
-    public boolean canAccessEvent(final BigInteger taskId) {
-        Authentication authentication = SecurityContextHolder.getContext()
-                .getAuthentication();
-        JwtEntity user = (JwtEntity) authentication.getPrincipal();
-        BigInteger id = user.getId();
-
-        return userService.isEventOwner(id, taskId);
-    }
 
 }

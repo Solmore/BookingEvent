@@ -11,13 +11,13 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigInteger;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
-@Schema(name = "EventDTO")
+@Schema(name = "EventDto")
 public class EventDto {
 
-    private BigInteger id;
+    private Long id;
 
     @Schema(description = "Event name", example = "RENAISSANCE WORLD TOUR")
     @NotNull(message = "Event name must be not null.",
@@ -30,7 +30,7 @@ public class EventDto {
     @Schema(description = "Date event", example = "2024-01-29")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private LocalDate date;
 
     @Schema(description = "Number of place", example = "50")
     private BigInteger availableAttendeesCount;
@@ -40,7 +40,8 @@ public class EventDto {
             groups = {OnCreate.class, OnUpdate.class})
     private String description;
 
-
+    @Schema(description = "Category of Event: Concert, Game, Conference",
+            example = "Concert")
     private Category category;
 
 

@@ -11,12 +11,10 @@ import org.hibernate.validator.constraints.Length;
 //import java.math.BigInteger;
 
 @Data
-@Schema(description = "User")
+@Schema(name = "User")
 public class UserDto {
 
-    //private BigInteger id;
-
-    @Schema(description = "User name", example = "John Doe")
+    @Schema(description = "User name", example = "Artem")
     @NotNull(message = "Name must be not null.",
             groups = {OnCreate.class, OnUpdate.class})
     @Length(max = 100,
@@ -24,7 +22,7 @@ public class UserDto {
             groups = {OnCreate.class, OnUpdate.class})
     private String name;
 
-    @Schema(description = "User email", example = "johndoe@gmail.com")
+    @Schema(description = "User email", example = "artem@gmail.com")
     @NotNull(message = "Email must be not null.",
             groups = {OnCreate.class, OnUpdate.class})
     @Length(max = 255,

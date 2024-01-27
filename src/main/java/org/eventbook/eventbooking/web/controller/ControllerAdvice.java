@@ -1,5 +1,6 @@
 package org.eventbook.eventbooking.web.controller;
 
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.eventbook.eventbooking.domain.exception.AccessDeniedException;
 import org.eventbook.eventbooking.domain.exception.ExceptionBody;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestControllerAdvice
+//@RestControllerAdvice
 public class ControllerAdvice {
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -70,7 +71,7 @@ public class ControllerAdvice {
         exceptionBody.setErrors(e.getConstraintViolations().stream()
                 .collect(Collectors.toMap(
                         violation -> violation.getPropertyPath().toString(),
-                        violation -> violation.getMessage()
+                        ConstraintViolation::getMessage
                 )));
         return exceptionBody;
     }
@@ -78,7 +79,7 @@ public class ControllerAdvice {
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionBody handleAuthentication(final AuthenticationException e) {
-        return new ExceptionBody("Authentication failed.");
+        return new ExceptionBody("Unauthorized.");
     }
 
 

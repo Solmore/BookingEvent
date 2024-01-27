@@ -5,15 +5,14 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
 import lombok.Data;
 import org.eventbook.eventbooking.domain.event.Event;
 
-import java.math.BigInteger;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -22,14 +21,21 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private BigInteger id;
+    private Long id;
 
     private String name;
     private String email;
     private String password;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(inverseJoinColumns = @JoinColumn(name = "event_id"))
-    private List<Event> events;
+    @ManyToMany(cascade = {CascadeType.DETACH,
+                           CascadeType.MERGE,
+                           CascadeType.PERSIST,
+                           CascadeType.REFRESH})
+    @JoinTable(name = "users_events",
+            joinColumns =  @JoinColumn(name = "user_id",
+                                       referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id",
+                                             referencedColumnName = "id"))
+    private Set<Event> events;
 
 }

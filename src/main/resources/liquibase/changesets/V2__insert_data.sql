@@ -17,9 +17,9 @@ values ('RENAISSANCE WORLD TOUR', '2024-01-29',700, 'The Renaissance World Tour 
         'StarTalk senior producer Lindsey Nyx Walker bring planetary science ' ||
         'down to Earth and principles of astrophysics within reach.', 'Conference');
 
-insert into users_events (user_id, event_id)
-values (1, 1),
-       (2, 3),
-       (1, 2),
-       (2, 2);
+insert into users_events (user_id, event_id, ticket_count)
+values (1, 1, 20),
+       (2, 3, 50),
+       (1, 2, 10),
+       (2, 2, 100);
 
