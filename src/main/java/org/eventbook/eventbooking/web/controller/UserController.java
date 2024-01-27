@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.validator.routines.EmailValidator;
 import org.eventbook.eventbooking.domain.event.Event;
 import org.eventbook.eventbooking.domain.user.User;
 import org.eventbook.eventbooking.service.AuthService;
@@ -115,7 +114,7 @@ public class UserController {
         return eventMapper.toDto(events);
     }
 
-    public static boolean patternMatches(String emailAddress) {
+    public static boolean patternMatches(final String emailAddress) {
         return Pattern.compile("^(.+)@(\\\\S+)$")
                 .matcher(emailAddress)
                 .matches();

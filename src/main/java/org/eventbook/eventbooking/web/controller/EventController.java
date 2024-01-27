@@ -82,7 +82,6 @@ public class EventController {
                 dto.getStartDate(),
                 dto.getEndDate(),
                 dto.getCategory().toString());
-        System.out.println(events);
         return eventMapper.toDto(events);
     }
 
