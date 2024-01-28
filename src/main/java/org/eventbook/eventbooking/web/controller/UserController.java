@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.eventbook.eventbooking.domain.event.Event;
 import org.eventbook.eventbooking.domain.user.User;
 import org.eventbook.eventbooking.service.AuthService;
@@ -22,6 +23,8 @@ import org.eventbook.eventbooking.web.dto.event.EventDto;
 import org.eventbook.eventbooking.web.dto.validation.OnCreate;
 import org.eventbook.eventbooking.web.mapper.EventMapper;
 import org.eventbook.eventbooking.web.mapper.UserMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -41,6 +44,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "Users")
+@Slf4j
 public class UserController {
 
     private final UserMapper userMapper;
@@ -49,6 +53,7 @@ public class UserController {
     private final AuthService authService;
     private final UserService userService;
     private final EventService eventService;
+    private final Logger applogger = LoggerFactory.getLogger("AppenderLog");
 
 
     @PostMapping("/auth")
@@ -68,6 +73,7 @@ public class UserController {
                              @Parameter(description = "The user's credentials.")
                              @Validated(OnCreate.class)
                              @RequestBody final Credentials authRequest) {
+        applogger.info("Controller method to authenticate a user");
         return authService.auth(authRequest);
     }
 
@@ -80,9 +86,10 @@ public class UserController {
             @ApiResponse(responseCode = "201", description = "Created"),
             @ApiResponse(responseCode = "401", description = "Bad request",
                     content = @Content) })
-    public void create(@Parameter(description = "The user to create.")
+    public void createUser(@Parameter(description = "The user to create.")
                        @Validated(OnCreate.class)
                        @RequestBody final UserDto userDto) {
+        applogger.info("Controller method to create a user");
         User user = userMapper.toEntity(userDto);
         if (patternMatches(user.getEmail())) {
             throw new RuntimeException("Email is not validate");
@@ -110,6 +117,7 @@ public class UserController {
                                                  + "on tickets for.")
                                          @PathVariable
                                          final Long userId) {
+        applogger.info("Controller method to look up a user's view of event");
         List<Event> events = eventService.getAllByUserId(userId);
         return eventMapper.toDto(events);
     }

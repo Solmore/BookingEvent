@@ -32,11 +32,6 @@ public class AuthServiceImplTest {
     @MockBean
     private UserServiceImpl userService;
 
-    @MockBean
-    private UserRepository userRepository;
-
-    @MockBean
-    private EventRepository eventRepository;
 
     @MockBean
     private JwtTokenProvider tokenProvider;

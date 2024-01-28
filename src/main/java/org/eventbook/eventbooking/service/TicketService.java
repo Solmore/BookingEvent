@@ -23,6 +23,9 @@ public interface TicketService {
 
     BigInteger getCountById(Long id);
 
+    BigInteger getCountByUserIdAndEventId(Long userId,
+                                          Long eventId);
+
 
     Event uploadCountByEventId(Long eventId,
                                BigInteger availableCount);

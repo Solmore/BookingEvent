@@ -10,12 +10,15 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.eventbook.eventbooking.domain.event.Event;
 import org.eventbook.eventbooking.service.EventService;
 import org.eventbook.eventbooking.web.dto.event.EventDto;
 import org.eventbook.eventbooking.web.dto.event.EventRequestDto;
 import org.eventbook.eventbooking.web.dto.validation.OnCreate;
 import org.eventbook.eventbooking.web.mapper.EventMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,10 +36,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "Events")
+@Slf4j
 public class EventController {
 
     private final EventService eventService;
     private final EventMapper eventMapper;
+    private final Logger applogger = LoggerFactory.getLogger("AppenderLog");
 
     @PostMapping("/events")
     @ResponseStatus(HttpStatus.CREATED)
@@ -53,9 +58,13 @@ public class EventController {
     @SecurityRequirements({@SecurityRequirement(name = "Bearer") })
     public Long createEvent(@Parameter(description = "The event to create.")
                             @Validated(OnCreate.class)
-                            @RequestBody final EventDto dto) {
+                            @RequestBody
+                            final EventDto dto) {
+        applogger.info("EventController will create a event");
         Event event = eventMapper.toEntity(dto);
         eventService.create(event);
+        applogger.info("Controller method to create a eventId={}",
+                event.getId());
         return event.getId();
     }
 
@@ -75,7 +84,9 @@ public class EventController {
                     content = @Content)})
     public List<EventDto> getAllEventByNameAndDurationAndCategory(
             @Validated(OnCreate.class)
-            @RequestBody final EventRequestDto dto) {
+            @RequestBody
+            final EventRequestDto dto) {
+        applogger.info("EventController to create a view of events");
         List<Event> events = new ArrayList<>();
         events = eventService.getAllEventByNameAndDurationAndCategory(
                 dto.getName(),

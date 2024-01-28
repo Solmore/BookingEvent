@@ -87,7 +87,7 @@ public class UserServiceImplTest {
     }
 
 
-/*    @Test
+    @Test
     void create() {
         String email = "username@gmail.com";
         String password = "password";
@@ -116,7 +116,7 @@ public class UserServiceImplTest {
         Assertions.assertThrows(IllegalStateException.class,
                 () -> userService.create(user));
         Mockito.verify(userRepository, Mockito.never()).save(user);
-    } */
+    }
 
 
     @Test

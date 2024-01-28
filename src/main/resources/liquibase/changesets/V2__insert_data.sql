@@ -3,11 +3,11 @@ values ('John Doe', 'johndoe@gmail.com', '$2a$10$Xl0yhvzLIaJCDdKBS0Lld.ksK7c2Zyt
        ('Mike Smith', 'mikesmith@yahoo.com', '$2a$10$fFLij9aYgaNCFPTL9WcA/uoCRukxnwf.vOQ8nrEEOskrCNmGsxY7m');
 
 insert into events (name, date, available_attendees_count ,description, category)
-values ('RENAISSANCE WORLD TOUR', '2024-01-29',700, 'The Renaissance World Tour was the ninth concert tour ' ||
+values ('RENAISSANCE WORLD TOUR', '2024-06-29',700, 'The Renaissance World Tour was the ninth concert tour ' ||
                                                              'by American singer-songwriter Beyoncé. ' ||
                                                          'Her highest-grossing tour to date, ' ||
                                                          'it was announced on February 1, 2023... ', 'Concert' ),
-       ('You’ve Got What It Takes, But It Will Take Everything You’ve Got', '2023-01-31', 300,
+       ('You’ve Got What It Takes, But It Will Take Everything You’ve Got', '2024-03-31', 300,
         'This quiz competition is a pursuit of technical knowledge and actually tests the students retention ' ||
         'and accumulation of knowledge towards application of concepts. It would be greatly helpful ' ||
         'in acknowledging their position on their journey to technical excellence. ',  'Game'),

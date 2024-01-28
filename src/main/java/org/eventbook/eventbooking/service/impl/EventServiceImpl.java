@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
@@ -30,11 +31,17 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<Event> getAllSoonEvents(final Period period) {
+        LocalDate now = LocalDate.now();
+        return eventRepository.findAllSoonEvents(now, now.plus(period));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Event> getAllByUserId(final Long id) {
         return Optional.ofNullable(eventRepository.findAllByUserId(id))
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Event not found"));
-        //return eventRepository.findAllByUserId(id);
     }
 
     @Override
@@ -100,9 +107,11 @@ public class EventServiceImpl implements EventService {
             LocalDate now = LocalDate.from(LocalDate.now()
                     .atStartOfDay(ZoneId.systemDefault()).toInstant());
             return Optional.ofNullable(eventRepository
-                            .findAllEventByNameAndDuration(nameSearch,
+                            .findAllEventByNameAndDurationAndCategory(
+                                                           nameSearch,
                                                            now,
-                                                           endDate))
+                                                           endDate,
+                                                           category))
                     .orElseThrow(() ->
                             new ResourceNotFoundException(
                                     "Event not found"));

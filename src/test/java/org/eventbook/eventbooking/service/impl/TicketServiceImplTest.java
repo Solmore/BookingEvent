@@ -73,15 +73,6 @@ public class TicketServiceImplTest {
         Assertions.assertEquals(usersId, testUsersId);
     }
 
-    /*@Test
-    void createTicketByUserIdAndEventId() {
-        Long userId = 1L;
-        Long eventId = 1L;
-        BigInteger count = BigInteger.valueOf(1);
-        ticketService.createTicketByUserIdAndEventId(eventId, count);
-        Mockito.verify(userRepository).createByUserIdAndEventId(userId, eventId, count);
-    }*/
-
     @Test
     void getCountById() {
         Long id = 1L;

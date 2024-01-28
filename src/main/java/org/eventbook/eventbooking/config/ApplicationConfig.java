@@ -28,7 +28,6 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableMethodSecurity
 @RequiredArgsConstructor(onConstructor = @__(@Lazy))
 public class ApplicationConfig {
@@ -67,8 +66,6 @@ public class ApplicationConfig {
                 );
     }
 
-
-
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity httpSecurity)
             throws Exception {
@@ -104,8 +101,6 @@ public class ApplicationConfig {
                         configurer.requestMatchers("/swagger-ui/**")
                                 .permitAll()
                                 .requestMatchers("/v3/api-docs/**")
-                                .permitAll()
-                                .requestMatchers("/graphiql")
                                 .permitAll()
                                 .requestMatchers(
                                         antMatcher(HttpMethod.POST, "/users"))

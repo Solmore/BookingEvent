@@ -12,9 +12,18 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-
-
     Optional<User> findByEmail(String email);
+
+    @Query(value = """
+             SELECT u.id as id,
+                    u.name as name,
+                    u.email as email,
+                    u.password as password
+            FROM users_events ut
+            JOIN users u ON ut.user_id = u.id
+            WHERE ut.event_id = :eventId
+            """, nativeQuery = true)
+    List<User> findEventRegistration(@Param("eventId") Long eventId);
 
     @Query(value = """
              SELECT exists(
@@ -58,5 +67,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
                                        Long eventId,
                                        @Param("count")
                                        BigInteger count);
+
+    @Query(value = """
+             SELECT ticket_count FROM users_events
+             WHERE user_id = :userId AND event_id = :eventId
+            """, nativeQuery = true)
+    BigInteger findCountByUserIdAndEventId(@Param("userId")
+                                           Long userId,
+                                           @Param("eventId")
+                                           Long eventId);
 
 }

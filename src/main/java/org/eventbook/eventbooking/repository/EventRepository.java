@@ -12,6 +12,14 @@ import java.util.List;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
 
+    @Query(value = """
+            SELECT * FROM events
+            WHERE (date > :start AND date <= :end)
+            """, nativeQuery = true)
+    List<Event> findAllSoonEvents(@Param("start")
+                                  LocalDate start,
+                                  @Param("end")
+                                  LocalDate end);
 
     @Query(value = """
             SELECT available_attendees_count FROM events
@@ -26,18 +34,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             WHERE ue.user_id = :id
             """, nativeQuery = true)
     List<Event> findAllByUserId(@Param("id") Long userId);
-
-    @Query(value = """
-            SELECT * FROM events
-            WHERE (date BETWEEN :start AND :end)
-            AND name LIKE :name
-            """, nativeQuery = true)
-    List<Event> findAllEventByNameAndDuration(@Param("name")
-                                              String name,
-                                              @Param("start")
-                                              LocalDate start,
-                                              @Param("end")
-                                              LocalDate end);
 
     @Query(value = """
             SELECT * FROM events
