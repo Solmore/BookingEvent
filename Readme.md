@@ -70,3 +70,11 @@ Use Cron pattern:https://crontab.guru/
 
 Also add swagger page:
 <img src="docs/swagger_page.png" alt=""/>
+
+Also application have Logger support, which create 3 different file: app.log, bookingevent.log and audit.log:
+
+1. app.log - save log info about working API.
+2. audit.log - save info about notification user with using mail.
+3. bookingevent.log - save info about working application.
+
+
