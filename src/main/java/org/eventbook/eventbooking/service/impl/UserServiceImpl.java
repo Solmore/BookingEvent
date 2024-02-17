@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<User> getEventsRegistration(final Long eventId) {
         return Optional.ofNullable(userRepository
                         .findEventRegistration(eventId))

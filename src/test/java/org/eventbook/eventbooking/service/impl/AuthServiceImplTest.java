@@ -1,6 +1,8 @@
 package org.eventbook.eventbooking.service.impl;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.eventbook.eventbooking.config.TestConfig;
+import org.eventbook.eventbooking.domain.exception.ResourceNotFoundException;
 import org.eventbook.eventbooking.domain.user.User;
 import org.eventbook.eventbooking.repository.EventRepository;
 import org.eventbook.eventbooking.repository.UserRepository;
@@ -64,5 +66,33 @@ public class AuthServiceImplTest {
                                 request.getPassword())
                 );
         Assertions.assertNotNull(response.getToken());
+    }
+
+    @Test
+    void loginWithIncorrectUsername() {
+        String email = "username@gmail.com";
+        String password = "password";
+        Credentials credentials = new Credentials();
+        credentials.setEmail(email);
+        credentials.setPassword(password);
+        Mockito.when(userService.getByEmail(email))
+                .thenThrow(ResourceNotFoundException.class);
+        Mockito.verifyNoInteractions(tokenProvider);
+        Assertions.assertThrows(ResourceNotFoundException.class,
+                () -> authService.auth(credentials));
+    }
+
+    @Test
+    void refresh(){
+        String refreshToken = "refreshToken";
+        String Token = "Token";
+        String newRefreshToken = "newRefreshToken";
+        CredentialsResponse credentialsResponse = new CredentialsResponse();
+        credentialsResponse.setToken(Token);
+        credentialsResponse.setRefreshToken(newRefreshToken);
+        Mockito.when(tokenProvider.refreshToken(refreshToken)).thenReturn(credentialsResponse);
+        CredentialsResponse testCredentialResponse = authService.refresh(refreshToken);
+        Mockito.verify(tokenProvider).refreshToken(refreshToken);
+        Assertions.assertEquals(testCredentialResponse,credentialsResponse);
     }
 }

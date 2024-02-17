@@ -2,7 +2,8 @@ package org.eventbook.eventbooking.web.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.eventbook.eventbooking.domain.event.Category;
 import org.eventbook.eventbooking.web.dto.validation.OnCreate;
 import org.eventbook.eventbooking.web.dto.validation.OnUpdate;
@@ -10,7 +11,8 @@ import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @Schema(name = "EventRequestDTO")
 public class EventRequestDto {
 

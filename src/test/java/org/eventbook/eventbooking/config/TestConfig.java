@@ -53,6 +53,7 @@ public class TestConfig {
                 jwtProperties());
     }
 
+
     @Bean
     @Primary
     public AuthServiceImpl authService(

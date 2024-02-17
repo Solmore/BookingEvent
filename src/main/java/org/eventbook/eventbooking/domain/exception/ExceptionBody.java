@@ -1,11 +1,13 @@
 package org.eventbook.eventbooking.domain.exception;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Map;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class ExceptionBody {
 

@@ -3,7 +3,8 @@ package org.eventbook.eventbooking.web.dto.event;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.eventbook.eventbooking.domain.event.Category;
 import org.eventbook.eventbooking.web.dto.validation.OnCreate;
 import org.eventbook.eventbooking.web.dto.validation.OnUpdate;
@@ -13,7 +14,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.math.BigInteger;
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @Schema(name = "EventDto")
 public class EventDto {
 

@@ -9,14 +9,16 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.eventbook.eventbooking.domain.event.Event;
 
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 public class User {
 
     @Id

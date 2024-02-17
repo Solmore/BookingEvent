@@ -8,7 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.ManyToMany;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.eventbook.eventbooking.domain.user.User;
 
 import java.math.BigInteger;
@@ -17,7 +18,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "events")
-@Data
+@Getter
+@Setter
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

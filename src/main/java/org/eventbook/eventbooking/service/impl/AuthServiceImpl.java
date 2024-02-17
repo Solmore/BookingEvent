@@ -25,7 +25,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public CredentialsResponse auth(final Credentials authRequest) {
-        applogger.info("Create token for authorization user");
+        applogger.info("Create tokens for authorization user");
         CredentialsResponse credentialsResponse = new CredentialsResponse();
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -34,6 +34,15 @@ public class AuthServiceImpl implements AuthService {
         User user = userService.getByEmail(authRequest.getEmail());
         credentialsResponse.setToken(jwtTokenProvider.createToken(
                 user.getId(), user.getEmail()));
+        credentialsResponse.setRefreshToken(jwtTokenProvider.createRefreshToken(
+                user.getId(), user.getEmail()
+        ));
         return credentialsResponse;
+    }
+
+    @Override
+    public CredentialsResponse refresh(final String refreshToken) {
+        applogger.info("Refresh Access token for authorization user");
+        return jwtTokenProvider.refreshToken(refreshToken);
     }
 }

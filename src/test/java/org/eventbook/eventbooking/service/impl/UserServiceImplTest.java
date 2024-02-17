@@ -48,6 +48,29 @@ public class UserServiceImplTest {
     @MockBean
     private AuthenticationManager authenticationManager;
 
+
+    @Test
+    void getUserById(){
+        Long userId = 1L;
+        User user = new User();
+        user.setId(userId);
+        Mockito.when(userRepository.findById(userId))
+                .thenReturn(Optional.of(user));
+        User testUser = userService.getUserById(userId);
+        Mockito.verify(userRepository).findById(userId);
+        Assertions.assertEquals(user,testUser);
+    }
+
+    @Test
+    void getUserByIdNotFound(){
+        Long userId = 1L;
+        Mockito.when(userRepository.findById(userId))
+                .thenReturn(Optional.empty());
+        Assertions.assertThrows(ResourceNotFoundException.class,
+                () -> userService.getUserById(userId));
+        Mockito.verify(userRepository).findById(userId);
+    }
+
     @Test
     void getByEmail(){
         String email = "username@gmail.com";
@@ -70,11 +93,11 @@ public class UserServiceImplTest {
         Mockito.verify(userRepository).findByEmail(email);
     }
 
+
+
     @Test
     void getAllByUserId() {
         Long userId = 1L;
-        User user = new User();
-
         List<Event> events = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             events.add(new Event());
@@ -128,6 +151,40 @@ public class UserServiceImplTest {
         boolean isOwner = userService.isEventOwner(userId, taskId);
         Mockito.verify(userRepository).isEventOwner(userId, taskId);
         Assertions.assertTrue(isOwner);
+    }
+
+    @Test
+    void getEventsRegistration(){
+        Long eventId = 1L;
+        List<User> users = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            users.add(new User());
+        }
+        Mockito.when(userRepository.findEventRegistration(eventId))
+                .thenReturn(users);
+        List<User> testUser = userService.getEventsRegistration(eventId);
+        Mockito.verify(userRepository).findEventRegistration(eventId);
+        Assertions.assertEquals(users, testUser);
+    }
+
+    @Test
+    void getEventsRegistrationNotFound(){
+        Long eventId = 1L;
+        Mockito.when(userRepository.findEventRegistration(eventId)).thenReturn(null);
+        Assertions.assertThrows(ResourceNotFoundException.class,
+                () -> userService.getEventsRegistration(eventId));
+        Mockito.verify(userRepository).findEventRegistration(eventId);
+    }
+
+    @Test
+    void isEventOwner(){
+        Long userId = 1L;
+        Long eventId = 1L;
+        Mockito.when(userRepository.isEventOwner(userId,eventId))
+                .thenReturn(false);
+        boolean isOwner = userService.isEventOwner(userId, eventId);
+        Mockito.verify(userRepository).isEventOwner(userId, eventId);
+        Assertions.assertFalse(isOwner);
     }
 
 

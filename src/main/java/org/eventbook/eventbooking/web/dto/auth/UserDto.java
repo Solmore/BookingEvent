@@ -3,14 +3,16 @@ package org.eventbook.eventbooking.web.dto.auth;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.eventbook.eventbooking.web.dto.validation.OnCreate;
 import org.eventbook.eventbooking.web.dto.validation.OnUpdate;
 import org.hibernate.validator.constraints.Length;
 
 //import java.math.BigInteger;
 
-@Data
+@Getter
+@Setter
 @Schema(name = "User")
 public class UserDto {
 

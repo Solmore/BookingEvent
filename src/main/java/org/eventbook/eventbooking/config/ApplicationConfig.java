@@ -109,6 +109,9 @@ public class ApplicationConfig {
                                         antMatcher(HttpMethod.POST, "/auth"))
                                 .permitAll()
                                 .requestMatchers(
+                                        antMatcher(HttpMethod.POST, "/refresh"))
+                                .permitAll()
+                                .requestMatchers(
                                         antMatcher(HttpMethod.GET, "/events"))
                                 .permitAll()
                                 .anyRequest()

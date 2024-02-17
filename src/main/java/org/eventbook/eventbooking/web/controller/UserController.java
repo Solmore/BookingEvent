@@ -77,6 +77,23 @@ public class UserController {
         return authService.auth(authRequest);
     }
 
+    @PostMapping("/refresh")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Authenticate a user.",
+            description = "This endpoint allows users to authenticate"
+                    + " and receive a Bearer token.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Authentication",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content) })
+    public CredentialsResponse refresh(
+            @Parameter(description = "The user's credentials.")
+            @RequestBody final String refreshToken) {
+        applogger.info("Controller method to refresh a user");
+        return authService.refresh(refreshToken);
+    }
+
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new user.",
